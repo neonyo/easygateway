@@ -1,19 +1,21 @@
-package endpoint
+package router
 
 import "github.com/neonyo/easygateway/pkg/ratelimiter"
 
-type HostOptions struct {
+type Endpoint struct {
 	Addr               string           //服务端地址
+	Name               string           //服务端名称
 	BlackIps           []string         //黑名单
 	RateLimiterEnabled bool             //是否开启限流
 	ReteLimiterRule    ratelimiter.Rule //限流规则
 	RateLimiterMsg     string           //限流后返回的json数据
+	Router             []*Router        //具体路由
 }
 
-type UrlOption struct {
-	Remark                 string
-	DomainId               int
-	ReqMethod              string
+type Router struct {
+	ID                     string           //id编码，需要保持唯一
+	Name                   string           //路由名称
+	ReqMethod              string           //请求方法
 	ReqPath                string           //请求地址
 	ProxyPath              string           //代理地址
 	IsAuth                 int              //是否需要鉴权 0:不鉴权 1:验证token&鉴权 2:验证token不鉴权
