@@ -1,33 +1,41 @@
-package easygateway
+package gw
 
 import (
-	"github.com/neonyo/easygateway/router"
+	"github.com/neonyo/gw/router"
+	"net/http"
 )
 
 type Server struct {
-	proxy *proxy
+	proxy       *proxy
+	options     []Option
+	httpOn      bool
+	grpcOn      bool
+	websocketOn bool
 }
 
-func New(c Conf) *Server {
+func New() *Server {
 	return &Server{
-		proxy: newProxy(proxyConfig{
-			Addr:      c.Addr,
-			Telemetry: c.Telemetry,
-		}),
+		proxy: newProxy(),
 	}
 }
 
-// AddEndpoints 新增代理服务
+// WhitHttp 设置http设置
+func (g *Server) WhitHttp(conf HttpConfig, f func(r *http.Request) string) {
+	g.httpOn = true
+	g.proxy.cfg.httpConfigOption = append(g.proxy.cfg.httpConfigOption, withHttpConf(conf), withEndpointSwitch(f))
+}
+
+// AddEndpoints 新增服务
 func (g *Server) AddEndpoints(rs []*router.Endpoint) {
 	g.proxy.httpProxy.addEndpoints(rs)
 }
 
-// UpdateEndpoint 更新单个代理服务
+// UpdateEndpoint 更新服务
 func (g *Server) UpdateEndpoint(r *router.Endpoint) {
 	g.proxy.httpProxy.updateEndpoint(r)
 }
 
-// DelEndpoint 删除单个代理服务
+// DelEndpoint 删除服务
 func (g *Server) DelEndpoint(r *router.Endpoint) {
 	g.proxy.httpProxy.delEndpoint(r)
 }
@@ -42,11 +50,9 @@ func (g *Server) UpdateRouter(e *router.Endpoint) {
 	g.proxy.httpProxy.updateRouter(e)
 }
 
-// WithEndpointOption 设置判断服务站点
-func (g *Server) WithEndpointOption(endpointFn endpointOption) {
-	g.proxy.withEndpointOption(endpointFn)
-}
-
 func (g *Server) Start() error {
+	if g.httpOn {
+		g.proxy.withHttp()
+	}
 	return g.proxy.start()
 }

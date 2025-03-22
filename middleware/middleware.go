@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"github.com/justinas/alice"
-	"github.com/neonyo/easygateway/router"
+	"github.com/neonyo/gw/router"
 	"net/http"
 )
 

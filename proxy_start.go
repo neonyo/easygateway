@@ -1,4 +1,4 @@
-package easygateway
+package gw
 
 import (
 	"errors"
@@ -11,10 +11,9 @@ import (
 )
 
 func (p *proxy) start() error {
-	if p.httpProxy.endpointOption == nil {
-		return errors.New("需要设置选择服务站点方法 WithEndpointOption")
+	if p.httpProxy.conf.hostSwitch == nil {
+		return errors.New("服务选择没有设置")
 	}
-
 	p.startHTTP()
 	return nil
 }
@@ -32,13 +31,13 @@ func (p *proxy) startHTTPWithListener(l net.Listener) {
 }
 
 func (p *proxy) startHTTP() {
-	l, err := net.Listen("tcp", p.cfg.Addr)
+	l, err := net.Listen("tcp", p.httpProxy.conf.Addr)
 	if err != nil {
 		log.Fatalf("start http failed failed with %+v", err)
 	}
 	m := cmux.New(l)
 	go p.startHTTPWithListener(m.Match(cmux.Any()))
-	fmt.Printf("Starting http server at %s...\n", p.cfg.Addr)
+	fmt.Printf("Starting http server at %s...\n", p.httpProxy.conf.Addr)
 	err = m.Serve()
 	if err != nil {
 		log.Fatalf("start http failed failed with %+v", err)
@@ -46,7 +45,7 @@ func (p *proxy) startHTTP() {
 }
 
 func (p *proxy) newHTTPServer() *http.Server {
-	if !p.cfg.Telemetry {
+	if !p.httpProxy.conf.Telemetry {
 		return &http.Server{
 			Handler: p.httpProxy,
 		}

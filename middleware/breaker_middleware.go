@@ -3,7 +3,7 @@ package middleware
 import (
 	"fmt"
 	"github.com/afex/hystrix-go/hystrix"
-	"github.com/neonyo/easygateway/pkg/errorx"
+	"github.com/neonyo/gw/pkg/errorx"
 	"net/http"
 )
 

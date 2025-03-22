@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/afex/hystrix-go/hystrix"
-	"github.com/neonyo/easygateway/router"
+	"github.com/neonyo/gw/router"
 	"net"
 	"net/http"
 )

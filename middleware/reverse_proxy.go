@@ -9,7 +9,7 @@ package middleware
 import (
 	"context"
 	"errors"
-	"github.com/neonyo/easygateway/router"
+	"github.com/neonyo/gw/router"
 	"io"
 	"log"
 	"net"

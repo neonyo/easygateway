@@ -1,6 +1,6 @@
 package router
 
-import "github.com/neonyo/easygateway/pkg/ratelimiter"
+import "github.com/neonyo/gw/pkg/ratelimiter"
 
 type Endpoint struct {
 	Addr               string           //服务端地址

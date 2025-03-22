@@ -1,34 +1,24 @@
-package easygateway
+package gw
 
 import (
-	"net/http"
 	"sync"
 )
 
-type proxyConfig struct {
-	Addr      string
-	Telemetry bool
-}
-
 type (
-	endpointOption func(r *http.Request) string
-	proxy          struct {
+	proxy struct {
 		sync.RWMutex
-		cfg proxyConfig
-		//endpoints []*router.Endpoint
+		cfg       *config
 		httpProxy *httpProxy
 	}
 )
 
-func newProxy(cfg proxyConfig) *proxy {
+func newProxy() *proxy {
 	return &proxy{
-		cfg: cfg,
-		httpProxy: &httpProxy{
-			Telemetry: cfg.Telemetry,
-		},
+		cfg:       new(config),
+		httpProxy: &httpProxy{},
 	}
 }
 
-func (p *proxy) withEndpointOption(fn endpointOption) {
-	p.httpProxy.endpointOption = fn
+func (p *proxy) withHttp() {
+	p.httpProxy.conf = NewHttpConfig(p.cfg.httpConfigOption...)
 }

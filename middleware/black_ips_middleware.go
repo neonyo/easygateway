@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"github.com/neonyo/easygateway/pkg/util"
+	"github.com/neonyo/gw/pkg/util"
 	"net"
 	"net/http"
 )

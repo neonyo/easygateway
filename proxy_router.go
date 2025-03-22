@@ -1,9 +1,9 @@
-package easygateway
+package gw
 
 import (
 	"github.com/go-chi/chi/v5"
-	"github.com/neonyo/easygateway/middleware"
-	"github.com/neonyo/easygateway/router"
+	"github.com/neonyo/gw/middleware"
+	"github.com/neonyo/gw/router"
 	"net/http"
 	"strings"
 )
