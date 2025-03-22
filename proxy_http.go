@@ -21,5 +21,4 @@ func (g *httpProxy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		mux.ServeHTTP(w, r)
 		return
 	}
-
 }
