@@ -19,8 +19,8 @@ func New() *Server {
 	}
 }
 
-// WhitHttp 设置http设置
-func (g *Server) WhitHttp(conf HttpConfig, f func(r *http.Request) string) {
+// RegisterHttp 设置http设置
+func (g *Server) RegisterHttp(conf HttpConfig, f func(r *http.Request) string) {
 	g.httpOn = true
 	g.proxy.cfg.httpConfigOption = append(g.proxy.cfg.httpConfigOption, withHttpConf(conf), withEndpointSwitch(f))
 }
@@ -50,9 +50,9 @@ func (g *Server) UpdateRouter(e *router.Endpoint) {
 	g.proxy.httpProxy.updateRouter(e)
 }
 
-func (g *Server) Start() error {
+func (g *Server) Start(addr string) error {
 	if g.httpOn {
 		g.proxy.withHttp()
 	}
-	return g.proxy.start()
+	return g.proxy.start(addr)
 }

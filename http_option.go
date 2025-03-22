@@ -3,7 +3,6 @@ package gw
 import "net/http"
 
 type HttpConfig struct {
-	Addr       string
 	Telemetry  bool
 	hostSwitch func(r *http.Request) string
 }

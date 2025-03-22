@@ -10,11 +10,11 @@ import (
 	"net/http"
 )
 
-func (p *proxy) start() error {
+func (p *proxy) start(addr string) error {
 	if p.httpProxy.conf.hostSwitch == nil {
 		return errors.New("服务选择没有设置")
 	}
-	p.startHTTP()
+	p.startHTTP(addr)
 	return nil
 }
 
@@ -30,14 +30,14 @@ func (p *proxy) startHTTPWithListener(l net.Listener) {
 	}
 }
 
-func (p *proxy) startHTTP() {
-	l, err := net.Listen("tcp", p.httpProxy.conf.Addr)
+func (p *proxy) startHTTP(addr string) {
+	l, err := net.Listen("tcp", addr)
 	if err != nil {
 		log.Fatalf("start http failed failed with %+v", err)
 	}
 	m := cmux.New(l)
 	go p.startHTTPWithListener(m.Match(cmux.Any()))
-	fmt.Printf("Starting http server at %s...\n", p.httpProxy.conf.Addr)
+	fmt.Printf("Starting http server at %s...\n", addr)
 	err = m.Serve()
 	if err != nil {
 		log.Fatalf("start http failed failed with %+v", err)
